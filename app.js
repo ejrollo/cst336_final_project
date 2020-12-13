@@ -19,8 +19,14 @@ app.use(session({
 app.use(express.urlencoded({extended: true}));
 
 //routes
-app.get("/", function(req, res){
-    res.render("index");
+app.get("/", async function(req, res){
+    let keyword = "playstation";
+    let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
+    let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
+    let response = await fetch(apiUrl);
+    let data = await response.json();
+    
+    res.render("index", {"ps4Url": data.urls.small});
 });
 
 app.post("/", async function(req, res){
