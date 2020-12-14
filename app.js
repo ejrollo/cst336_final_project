@@ -14,6 +14,8 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+//session variable
+var ssn;
 
 //parse POST parameters
 app.use(express.urlencoded({extended: true}));
@@ -55,14 +57,11 @@ app.post("/", async function(req, res){
         res.render("index", {"ps4Url": data.urls.small, "loginError":true});
     }
     
-    
-    
-    
-    
 });
 
 //routes
 app.get("/product", isAuthenticated, async function(req, res){
+    
     let keyword = "playstation";
     let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
     let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
@@ -75,6 +74,7 @@ app.get("/product", isAuthenticated, async function(req, res){
 });
 
 app.get("/checkout", async function(req, res){
+    
     let randName = fakeData.name.findName();
     
     res.render("checkout", {"fakerName":randName});
