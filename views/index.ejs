@@ -3,10 +3,16 @@
 
 <body class="text-center">
     <form method="POST">
-        <input type="text" id="username" placeholder="username"><br><br>
-        <input type="text" id="password" placeholder="password"><br><br>
+        <input type="text" name="username" placeholder="username"><br><br>
+        <input type="text" name="password" placeholder="password"><br><br>
         <button class="btn btn-dark"> Login </button>
     </form>
+    <br>
+    <% if (typeof loginError != "undefined" && loginError){ %>
+        
+            <h3 class="error" style="color: red;">Wrong Credentials!</h3>
+            
+        <% } %>
     <br><br>
     <img src="<%= ps4Url %>" width="600" height="500">
     

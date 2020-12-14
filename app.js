@@ -33,8 +33,6 @@ app.post("/", async function(req, res){
     let username = req.body.username;
     let password = req.body.password;
     
-    req.session.authenticated = true;
-    
     let keyword = "playstation";
     let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
     let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
@@ -43,7 +41,24 @@ app.post("/", async function(req, res){
     
     let randName = fakeData.name.findName();
     
-    res.render("product", {"ps4Url": data.urls.small, "fakerName":randName});
+    if (username == '' || password == ''){
+        req.session.authenticated = false;
+        res.render("index", {"ps4Url": data.urls.small, "loginError":true});
+    } 
+    let match = await checkCredentials(username, password);
+    console.log(match[0].username);
+    if (match.length > 0){
+        req.session.authenticated = true;
+        res.render("product", {"ps4Url": data.urls.small, "fakerName":randName});
+    } else{
+        req.session.authenticated = false;
+        res.render("index", {"ps4Url": data.urls.small, "loginError":true});
+    }
+    
+    
+    
+    
+    
 });
 
 //routes
@@ -82,6 +97,19 @@ function isAuthenticated(req, res, next){
     } else{
         next();
     }
+}
+
+function checkCredentials(username, password){
+    let sql = "SELECT * FROM customer WHERE username = ? AND password = ?";
+    return new Promise(function(resolve, reject){
+        let conn = createDBConnection();
+        conn.query(sql, [username, password], function (err, rows, fields){
+            if (err) throw err;
+            console.log("Rows found: " + rows.length);
+            resolve(rows);
+        });//query
+    });//promise
+    
 }
 
 //starting server
