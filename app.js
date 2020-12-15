@@ -28,6 +28,7 @@ app.get("/", async function(req, res){
     let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
     let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
     let response = await fetch(apiUrl);
+    let randName = fakeData.name.findName();
     
     if (!response.ok){
         ssn.pic = "img/ps.jpg";
@@ -36,48 +37,63 @@ app.get("/", async function(req, res){
         ssn.pic = data.urls.small;
     }
     
-    res.render("index", {"ps4Url": ssn.pic});
+    res.render("index", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
 app.get("/register", async function(req, res){
-    ssn.req.session;
+    let randName = fakeData.name.findName();
+    res.render("register", {"ps4Url": ssn.pic, "fakerName":randName});
+});
+
+app.get("/registered", async function(req, res){
+    let username = req.query.username;
+    let password = req.query.password;
+    let zip = req.query.zip;
+    let city = req.query.city;
+    let state = req.query.state;
+    let randName = fakeData.name.findName();
     
-    res.render("register", {"ps4Url": ssn.pic});
+    let sql = "INSERT INTO customer (username, password, zip, city, state) VALUES (?,?,?,?,?)";
+    let sqlParams = [username, password, zip, city, state];
+    let conn = createDBConnection();
+    conn.query(sql, sqlParams, function (err, rows, fields){
+       if (err) throw err;
+       console.log(rows);
+    });
+    
+    res.render("registered", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
 app.post("/", async function(req, res){
-    ssn = req.session;
     let username = req.body.username;
     let password = req.body.password;
     let randName = fakeData.name.findName();
     
     if (username == '' || password == ''){
         req.session.authenticated = false;
-        res.render("index", {"ps4Url": ssn.pic, "loginError":true});
+        res.render("index", {"ps4Url": ssn.pic, "loginError":true, "fakerName":randName});
     } 
     let match = await checkCredentials(username, password);
+    ssn.userId = match[0].user_id;
     if (match.length > 0){
         req.session.authenticated = true;
-        res.render("product", {"ps4Url": ssn.pic, "fakerName":randName});
+        res.render("product", {"ps4Url": ssn.pic, "fakerName":randName, "userid":ssn.userId});
     } else{
         req.session.authenticated = false;
-        res.render("index", {"ps4Url": ssn.pic, "loginError":true});
+        res.render("index", {"ps4Url": ssn.pic, "loginError":true, "fakerName":randName});
     }
 });
 
 //routes
 app.get("/product", isAuthenticated, async function(req, res){
-    ssn = req.session;
-    
     let randName = fakeData.name.findName();
     
     res.render("product", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
 app.get("/checkout", async function(req, res){
-    ssn = req.session;
-    
     let randName = fakeData.name.findName();
+    
     res.render("checkout", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
@@ -111,6 +127,7 @@ function checkCredentials(username, password){
     });//promise
     
 }
+
 
 //starting server
 app.listen(process.env.PORT, process.env.IP, function(){

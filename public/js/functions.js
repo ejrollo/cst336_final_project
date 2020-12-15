@@ -35,9 +35,9 @@ $(document).ready(function(){
         $("#totalCost").html(`${total}`);
     });
     
-<<<<<<< HEAD
     //displaying city from API after typing a zip code
     $("#zip").on("change", async function(){
+        $("#zipError").html("");
         let zipCode = $("#zip").val();
         let url = `https://cst336.herokuapp.com/projects/api/cityInfoAPI.php?zip=${zipCode}`;
         let response = await fetch(url);
@@ -55,6 +55,3 @@ $(document).ready(function(){
     
     
 });
-=======
-});
->>>>>>> 3454fb99c094b21e25aa399b7f7a1de061b33ae6
