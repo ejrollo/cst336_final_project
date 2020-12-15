@@ -1,6 +1,5 @@
 <%- include('partials/header.ejs') %>
 
-
 <body class="text-center">
     <form method="POST">
         <input type="text" name="username" placeholder="username"><br><br>
@@ -9,17 +8,8 @@
     </form>
     <br>
     <% if (typeof loginError != "undefined" && loginError){ %>
-        
             <h3 class="error" style="color: red;">Wrong Credentials!</h3>
-            
-        <% } %>
-    <br><br>
-    <img src="<%= ps4Url %>" width="600" height="500">
-    
-</body>
-
-
-
-
-    
+    <% } %>
+    <br><br>    
+</body>  
 </html>

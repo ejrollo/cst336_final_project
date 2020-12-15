@@ -14,70 +14,61 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+//session variable
+var ssn;
 
 //parse POST parameters
 app.use(express.urlencoded({extended: true}));
 
 //routes
 app.get("/", async function(req, res){
+    ssn = req.session;
+    
     let keyword = "playstation";
-    let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
+    let apiKey = "jyM2fFTpp_X9G-4B5Hy24M-PDiRlUV9XISOHZGxANA0";
     let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
     let response = await fetch(apiUrl);
     let data = await response.json();
     
-    res.render("index", {"ps4Url": data.urls.small});
+    ssn.pic = data.urls.small;
+    
+    res.render("index", {"ps4Url": ssn.pic});
 });
 
 app.post("/", async function(req, res){
+    ssn = req.session;
     let username = req.body.username;
     let password = req.body.password;
-    
-    let keyword = "playstation";
-    let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
-    let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
-    let response = await fetch(apiUrl);
-    let data = await response.json();
-    
     let randName = fakeData.name.findName();
     
     if (username == '' || password == ''){
         req.session.authenticated = false;
-        res.render("index", {"ps4Url": data.urls.small, "loginError":true});
+        res.render("index", {"ps4Url": ssn.pic, "loginError":true});
     } 
     let match = await checkCredentials(username, password);
-    console.log(match[0].username);
     if (match.length > 0){
         req.session.authenticated = true;
-        res.render("product", {"ps4Url": data.urls.small, "fakerName":randName});
+        res.render("product", {"ps4Url": ssn.pic, "fakerName":randName});
     } else{
         req.session.authenticated = false;
-        res.render("index", {"ps4Url": data.urls.small, "loginError":true});
+        res.render("index", {"ps4Url": ssn.pic, "loginError":true});
     }
-    
-    
-    
-    
-    
 });
 
 //routes
 app.get("/product", isAuthenticated, async function(req, res){
-    let keyword = "playstation";
-    let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
-    let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
-    let response = await fetch(apiUrl);
-    let data = await response.json();
+    ssn = req.session;
     
     let randName = fakeData.name.findName();
     
-    res.render("product", {"ps4Url": data.urls.small, "fakerName":randName});
+    res.render("product", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
 app.get("/checkout", async function(req, res){
-    let randName = fakeData.name.findName();
+    ssn = req.session;
     
-    res.render("checkout", {"fakerName":randName});
+    let randName = fakeData.name.findName();
+    res.render("checkout", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
 function createDBConnection(){
@@ -105,7 +96,6 @@ function checkCredentials(username, password){
         let conn = createDBConnection();
         conn.query(sql, [username, password], function (err, rows, fields){
             if (err) throw err;
-            console.log("Rows found: " + rows.length);
             resolve(rows);
         });//query
     });//promise
