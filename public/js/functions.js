@@ -5,7 +5,6 @@ $(document).ready(function(){
     var total = 0;
     //array of games
     var games = [];
-    //game1
     games[1] = {cost: 59.99, qty: 0, name: "ASSASSINS CREED VALHALLA"};
     games[2] = {cost: 69.99, qty: 0, name: "MADDEN 21"};
     games[3] = {cost: 99.99, qty: 0, name: "FIFA 21"};
