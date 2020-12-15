@@ -35,7 +35,6 @@ $(document).ready(function(){
         $("#totalCost").html(`${total}`);
     });
     
-<<<<<<< HEAD
     //displaying city from API after typing a zip code
     $("#zip").on("change", async function(){
         let zipCode = $("#zip").val();
@@ -51,10 +50,4 @@ $(document).ready(function(){
         }
                 
     });//zip
-    
-    
-    
 });
-=======
-});
->>>>>>> 3454fb99c094b21e25aa399b7f7a1de061b33ae6

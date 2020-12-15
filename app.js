@@ -83,11 +83,11 @@ app.get("/checkout", async function(req, res){
 
 function createDBConnection(){
     var conn = mysql.createPool({
-        connectionLimit: 10,
-        host: "ixnzh1cxch6rtdrx.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "gj572ofpi2j0wtwv",
-        password: "xhwj9t0oc83y953d",
-        database: "z6v85vcvb5bkcdal"
+        connectionLimit: 10, // heroku JawsDB connection limit
+        host: 'r1bsyfx4gbowdsis.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+        user: 'hs7fn5zvuyfj0u9n',
+        password: 'e92lz98lgww45ogn',
+        database: 'l0ifn23srsrdfe2i'
     });
     return conn;
 }
