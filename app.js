@@ -49,9 +49,6 @@ app.post("/", async function(req, res){
     ssn = req.session;
     let username = req.body.username;
     let password = req.body.password;
-    
-   
-    
     let randName = fakeData.name.findName();
     
     if (username == '' || password == ''){
@@ -66,7 +63,6 @@ app.post("/", async function(req, res){
         req.session.authenticated = false;
         res.render("index", {"ps4Url": ssn.pic, "loginError":true});
     }
-    
 });
 
 //routes
