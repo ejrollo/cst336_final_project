@@ -35,4 +35,22 @@ $(document).ready(function(){
         $("#totalCost").html(`${total}`);
     });
     
+    //displaying city from API after typing a zip code
+    $("#zip").on("change", async function(){
+        let zipCode = $("#zip").val();
+        let url = `https://cst336.herokuapp.com/projects/api/cityInfoAPI.php?zip=${zipCode}`;
+        let response = await fetch(url);
+        let data = await response.json();
+                
+        $("#city").html(data.city);
+        
+        if (data == false){
+            $("#zipError").html("Zip code not valid, re-enter");
+            $("#zipError").css("color","red");
+        }
+                
+    });//zip
+    
+    
+    
 });
