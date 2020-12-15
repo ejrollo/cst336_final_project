@@ -2,8 +2,8 @@
 
    <body class="text-center">     
         <h2 style="font-size: 5em"> BEST SELLERS </h2><br>
-        <div class="container">
-            <div class="row">
+        <main class="container">
+            <section class="row">
                 <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
                     <span id="game1cost"></span><br>
                     <img src="img/game1.jpg" alt="Game1" class="rounded" width="200" height="250" />
@@ -22,9 +22,9 @@
                     <br><br>
                     <button id="game3" type="button" class="btn btn-success text-nowrap gamebtn" value="3"> Add to Cart </button>
                 </div>
-            </div>
+            </section>
             <br><br>
-            <div class="row">
+            <section class="row">
                 <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
                     <span id="game4cost"></span><br>
                     <img src="img/game4.jpg" alt="Game1" class="rounded" width="200" height="250" />
@@ -43,9 +43,9 @@
                     <br><br>
                     <button id="game6" type="button" class="btn btn-success text-nowrap gamebtn" value="6"> Add to Cart </button>
                 </div>
-            </div>
+            </section>
             <br><br>
-            <div class="row">
+            <section class="row">
                 <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
                     <span id="game7cost"></span><br>
                     <img src="img/game7.jpg" alt="Game1" class="rounded" width="200" height="250" />
@@ -64,9 +64,9 @@
                     <br><br>
                     <button id="game9" type="button" class="btn btn-success text-nowrap gamebtn" value="9"> Add to Cart </button>
                 </div>
-            </div>
+            </section>
             <br><br>
-            <div class="row">
+            <section class="row">
                 <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
                     <span id="game10cost"></span><br>
                     <img src="img/game10.jpg" alt="Game1" class="rounded" width="200" height="250" />
@@ -85,8 +85,8 @@
                     <br><br>
                     <button id="game12" type="button" class="btn btn-success text-nowrap gamebtn" value="12"> Add to Cart </button>
                 </div>
-            </div>
-            <div id="shoppingcart" class="d-flex justify-content-center" style="border-style: solid">
+            </section>
+            <section id="shoppingcart" class="d-flex justify-content-center" style="border-style: solid">
                 <form action="/checkout">
                     <h2> SHOPPING CART </h2><br>
                     <table id="cart" style="width:100%; background-color: #f1f1c1; text-align:left">
@@ -100,9 +100,8 @@
                     <button class="btn btn-primary"> Checkout </button>
                 </form>
                 <br><br>
-            </div>
-        </div>
-
+            </section>
+        </main>
     </body>
 
 <%- include('partials/footer.ejs') %>

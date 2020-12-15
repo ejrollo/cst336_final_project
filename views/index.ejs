@@ -1,25 +1,16 @@
 <%- include('partials/header.ejs') %>
 
-
 <body class="text-center">
     <form method="POST">
         <input type="text" name="username" placeholder="username"><br><br>
-        <input type="text" name="password" placeholder="password"><br><br>
+        <input type="password" name="password" placeholder="password"><br><br>
         <button class="btn btn-dark"> Login </button>
     </form>
     <br>
     <% if (typeof loginError != "undefined" && loginError){ %>
-        
             <h3 class="error" style="color: red;">Wrong Credentials!</h3>
-            
-        <% } %>
-    <br><br>
-    
-    
-</body>
-
-
-
-
-    
+    <% } %>
+    <br><br>    
+</body>  
 </html>
+
