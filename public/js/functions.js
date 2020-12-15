@@ -25,13 +25,13 @@ $(document).ready(function(){
     
     
     $(".gamebtn").on("click", function(){
-        let btnNum = this.value;
-        games[btnNum].qty++;
-        total += games[btnNum].cost;
-        if(games[btnNum].qty == 1) {
-            $("#cart").append(`<tr><td>${games[btnNum].name}</td> <td id=${`game${btnNum}qty`}>${games[btnNum].qty}</td> <td>${games[btnNum].cost}</td></tr><br>`);
+        let gameNum = this.value;
+        games[gameNum].qty++;
+        total += games[gameNum].cost;
+        if(games[gameNum].qty == 1) {
+            $("#cart").append(`<tr id=${`cart{btnNum}`}><td>${games[gameNum].name}</td> <td id=${`game${gameNum}qty`}>${games[gameNum].qty}</td> <td>${games[gameNum].cost}</td></tr><br>`);
         }
-        $(`#game${btnNum}qty`).html(`${games[btnNum].qty}`);
+        $(`#game${gameNum}qty`).html(`${games[gameNum].qty}`);
         $("#totalCost").html(`${total}`);
     });
     
