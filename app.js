@@ -3,7 +3,7 @@ const app = express();
 const fetch = require("node-fetch");
 const fakeData = require("faker");
 const session = require('express-session');
-const mysql = require('mysql');
+const pool = require('./public/js/dbPool.js');
 
 
 app.set("view engine", "ejs");
@@ -23,7 +23,6 @@ app.use(express.urlencoded({extended: true}));
 //routes
 app.get("/", async function(req, res){
     ssn = req.session;
-    
     let keyword = "playstation";
     let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
     let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
@@ -53,15 +52,18 @@ app.get("/registered", async function(req, res){
     let state = req.query.state;
     let randName = fakeData.name.findName();
     
-    let sql = "INSERT INTO customer (username, password, zip, city, state) VALUES (?,?,?,?,?)";
-    let sqlParams = [username, password, zip, city, state];
-    let conn = createDBConnection();
-    conn.query(sql, sqlParams, function (err, rows, fields){
-       if (err) throw err;
-       console.log(rows);
-    });
+    let userExists = await checkCredentials(username, password);
+    if (userExists.length > 0){
+        res.render("register", {"ps4Url": ssn.pic, "usernameError":true, "fakerName":randName});
+    } else{
+        let sql = "INSERT INTO customer (username, password, zip, city, state) VALUES (?,?,?,?,?)";
+        let sqlParams = [username, password, zip, city, state];
+        pool.query(sql, sqlParams, function (err, rows, fields){  
+            if (err) throw err;
+        });
+        res.render("registered", {"ps4Url": ssn.pic, "fakerName":randName});
+    }
     
-    res.render("registered", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
 app.post("/", async function(req, res){
@@ -74,7 +76,6 @@ app.post("/", async function(req, res){
         res.render("index", {"ps4Url": ssn.pic, "loginError":true, "fakerName":randName});
     } 
     let match = await checkCredentials(username, password);
-    ssn.userId = match[0].user_id;
     if (match.length > 0){
         req.session.authenticated = true;
         res.render("product", {"ps4Url": ssn.pic, "fakerName":randName, "userid":ssn.userId});
@@ -97,17 +98,6 @@ app.get("/checkout", async function(req, res){
     res.render("checkout", {"ps4Url": ssn.pic, "fakerName":randName});
 });
 
-function createDBConnection(){
-    var conn = mysql.createPool({
-        connectionLimit: 10,
-        host: "ixnzh1cxch6rtdrx.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "gj572ofpi2j0wtwv",
-        password: "xhwj9t0oc83y953d",
-        database: "z6v85vcvb5bkcdal"
-    });
-    return conn;
-}
-
 function isAuthenticated(req, res, next){
     if (!req.session.authenticated){
         res.redirect('/');
@@ -119,15 +109,13 @@ function isAuthenticated(req, res, next){
 function checkCredentials(username, password){
     let sql = "SELECT * FROM customer WHERE username = ? AND password = ?";
     return new Promise(function(resolve, reject){
-        let conn = createDBConnection();
-        conn.query(sql, [username, password], function (err, rows, fields){
+        pool.query(sql, [username, password], function (err, rows, fields){
             if (err) throw err;
             resolve(rows);
         });//query
     });//promise
     
 }
-
 
 //starting server
 app.listen(process.env.PORT, process.env.IP, function(){

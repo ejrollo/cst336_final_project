@@ -1,12 +1,18 @@
 <%- include('partials/header.ejs') %>
 
 <body class="text-center">
+    <h3> SETUP AN ACCOUNT </h3><br>
+    <% if (typeof usernameError != "undefined" && usernameError){ %>
+        <h3 class="error" style="color: red;"> Account exists: create a new one or login </h3><br>
+        <form action="/">
+            <button class="btn btn-dark"> Login Page </button><br><br>
+        </form>
+    <% } %>
+    
     <form action="/registered">
         <section class="form-group">
-            <h3> SETUP AN ACCOUNT </h3><br><br>
             <input type="text" name="username" placeholder="username"><br><br>
             <input type="text" name="password" placeholder="password"><br><br>
-            
             <input type="text" id="zip" name="zip" placeholder="zip code"> <h4 id="zipError"></h4><br>
             City: <h4 id="city" name="city"></h4><br>
             State: 
