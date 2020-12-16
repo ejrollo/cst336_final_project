@@ -10,9 +10,19 @@
                 <th>QTY</th> 
                 <th>COST</th>
             </tr>
+
+            <% cart.forEach(function(item){ %>
+                <tr>
+                    <td><%= item["productName"] %></td>
+                    <td><%= item["quantity"] %></td>
+                    <td><%= item["productCost"] %></td>
+                </tr>
+            <% }); %>
         </table><br>
         
         <button class="btn btn-primary">Submit Order</button>
     </form>
     
 </body>
+<%- include('partials/footer.ejs') %>
+</html>

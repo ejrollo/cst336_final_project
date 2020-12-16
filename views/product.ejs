@@ -3,98 +3,42 @@
    <body class="text-center">     
         <h2 style="font-size: 5em"> BEST SELLERS </h2><br>
         <main class="container">
-            <section class="row">
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game1cost"></span><br>
-                    <img src="img/game1.jpg" alt="Game1" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game1" type="button" class="btn btn-success text-nowrap gamebtn" value="1"> Add to Cart </button>
+            <% products.forEach(function(game, i){ %>
+                <% if (i === 0 || i % 3 === 0) { %>
+                    <section class="row">
+                <% } %>
+                <div class="col-4 shadow-lg p-3 mb-3 bg-white rounded">
+                    <form action="/addCart" method="post">
+                        <span id="game<%= i+1 %>cost"></span><br>
+                        <img src="img/game<%= i+1 %>.jpg" alt="<%= game["product_name"] %>" class="rounded" width="200" height="250" />
+                        <br><br>
+                        <button id="game<%= i+1 %>" type="submit" class="btn btn-success text-nowrap gamebtn" value="<%= i+1 %>"> Add to Cart </button>
+                        <input type="hidden" name="productId" value="<%= game["product_id"] %>">
+                        <input type="hidden" name="productName" value="<%= game["product_name"] %>">
+                        <input type="hidden" name="productCost" value="<%= game["product_cost"] %>">
+                    </form>
                 </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game2cost"></span><br>
-                    <img src="img/game2.jpg" alt="Game2" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game2" type="button" class="btn btn-success text-nowrap gamebtn" value="2"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game3cost"></span><br>
-                    <img src="img/game3.jpg" alt="Game3" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game3" type="button" class="btn btn-success text-nowrap gamebtn" value="3"> Add to Cart </button>
-                </div>
-            </section>
-            <br><br>
-            <section class="row">
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game4cost"></span><br>
-                    <img src="img/game4.jpg" alt="Game1" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game4" type="button" class="btn btn-success text-nowrap gamebtn" value="4"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game5cost"></span><br>
-                    <img src="img/game5.jpg" alt="Game2" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game5" type="button" class="btn btn-success text-nowrap gamebtn" value="5"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game6cost"></span><br>
-                    <img src="img/game6.jpg" alt="Game3" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game6" type="button" class="btn btn-success text-nowrap gamebtn" value="6"> Add to Cart </button>
-                </div>
-            </section>
-            <br><br>
-            <section class="row">
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game7cost"></span><br>
-                    <img src="img/game7.jpg" alt="Game1" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game7" type="button" class="btn btn-success text-nowrap gamebtn" value="7"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game8cost"></span><br>
-                    <img src="img/game8.jpg" alt="Game2" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game8" type="button" class="btn btn-success text-nowrap gamebtn" value="8"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game9cost"></span><br>
-                    <img src="img/game9.jpg" alt="Game3" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game9" type="button" class="btn btn-success text-nowrap gamebtn" value="9"> Add to Cart </button>
-                </div>
-            </section>
-            <br><br>
-            <section class="row">
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game10cost"></span><br>
-                    <img src="img/game10.jpg" alt="Game1" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game10" type="button" class="btn btn-success text-nowrap gamebtn" value="10"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game11cost"></span><br>
-                    <img src="img/game11.jpg" alt="Game2" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game11" type="button" class="btn btn-success text-nowrap gamebtn" value="11"> Add to Cart </button>
-                </div>
-                <div class="col-4 shadow-lg p-3 mb-5 bg-white rounded">
-                    <span id="game12cost"></span><br>
-                    <img src="img/game12.jpg" alt="Game3" class="rounded" width="200" height="250" />
-                    <br><br>
-                    <button id="game12" type="button" class="btn btn-success text-nowrap gamebtn" value="12"> Add to Cart </button>
-                </div>
-            </section>
+                <% if ((i + 1) % 3 === 0) { %>
+                    </section>
+                <% } %>
+            <% }); %>
+            
             <section id="shoppingcart" class="d-flex justify-content-center" style="border-style: solid">
                 <form action="/checkout">
                     <h2> SHOPPING CART </h2><br>
                     <table id="cart" style="width:100%; background-color: #f1f1c1; text-align:left">
-                        <tr>
+                         <tr>
                             <th>GAME</th>
                             <th>QTY</th> 
                             <th>COST</th>
                         </tr>
+                        <% cart.forEach(function(item){ %>
+                            <tr>
+                                <td><%= item["productName"] %></td>
+                                <td><%= item["quantity"] %></td>
+                                <td><%= item["productCost"] %></td>
+                            </tr>
+                        <% }); %>
                     </table><br>
                     <strong>TOTAL COST: $</strong><span id="totalCost"></span><br><br>
                     <button class="btn btn-primary"> Checkout </button>
