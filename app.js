@@ -18,13 +18,11 @@ app.use(session({
 var ssn;
 
 //parse POST parameters
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 //routes
-app.get("/", async function(req, res) {
+app.get("/", async function(req, res){
     ssn = req.session;
-    ssn.cart = [];
-
     let keyword = "playstation";
     let apiKey = "-3BOO4vv-FqVD_CUht9-NXtA5Pb0NMM0RkPJE6yZjb4";
     let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&featured=true&orientation=landscape&query=${keyword}`;
@@ -33,8 +31,7 @@ app.get("/", async function(req, res) {
 
     if (!response.ok){
         ssn.pic = "img/ps.jpg";
-    }
-    else {
+    } else{
         let data = await response.json();
         ssn.pic = data.urls.small;
     }
@@ -69,64 +66,28 @@ app.get("/registered", async function(req, res){
     }
 });
 
-app.post("/", async function(req, res) {
-    ssn = req.session;
+app.post("/", async function(req, res){
     let username = req.body.username;
     let password = req.body.password;
     let randName = fakeData.name.findName();
-    let cart = [];
-    let catalog = [];
-
-    if (username == '' || password == '') {
+    
+    if (username == '' || password == ''){
         req.session.authenticated = false;
         res.render("index", {"ps4Url": ssn.pic, "loginError":true, "fakerName":randName});
     }
+
     let match = await checkCredentials(username, password);
-    if (match.length > 0) {
+    if (match.length > 0){
         req.session.authenticated = true;
-        // store username and id in session
-        req.session.userId = match[0].user_id;
-        req.session.username = match[0].username;
-
-        let products = await getProducts();
-        let items = await getCart(req.session.userId);
-
-        if (products) {
-            catalog = products;
-            req.session.products = products;
-        }
-
-        if (items) {
-            cart = items;
-            req.session.items = items;
-        }
-
-        res.render("product", { "ps4Url": ssn.pic, "fakerName": randName, "products": catalog, "cart": cart });
-    }
-    else {
+        res.render("product", {"ps4Url": ssn.pic, "fakerName":randName, "userid":ssn.userId});
+    } else{
         req.session.authenticated = false;
         res.render("index", {"ps4Url": ssn.pic, "loginError":true, "fakerName":randName});
     }
 });
 
 //routes
-app.get("/product", isAuthenticated, async function(req, res) {
-    let cart = [];
-    let catalog = [];
-
-    let products = await getProducts();
-    let items = await getCart(req.session.userId);
-
-    if (products) {
-        catalog = products;
-        req.session.products = products;
-    }
-
-    if (items) {
-        cart = items;
-        req.session.items = items;
-    }
-
+app.get("/product", isAuthenticated, async function(req, res){
     let randName = fakeData.name.findName();
 
     res.render("product", { "ps4Url": req.session.pic, "fakerName": randName, "products": catalog, "cart": cart });
@@ -141,11 +102,7 @@ app.get("/checkout", async function(req, res) {
     res.render("checkout", { "ps4Url": req.session.pic, "fakerName": randName, "cart": cart });
 });
 
-app.post("/addCart", async function(req, res) {
-    let productId = parseInt(req.body.productId);
-    let productName = req.body.productName;
-    let productCost = req.body.productCost;
-    console.log(req.body)
+app.get("/checkout", async function(req, res){
     let randName = fakeData.name.findName();
 
     let product = await addToCart(productId, productName, productCost, 1, req.session.userId);
@@ -159,13 +116,12 @@ app.post("/addCart", async function(req, res) {
 function isAuthenticated(req, res, next){
     if (!req.session.authenticated){
         res.redirect('/');
-    }
-    else {
+    } else{
         next();
     }
 }
 
-function checkCredentials(username, password) {
+function checkCredentials(username, password){
     let sql = "SELECT * FROM customer WHERE username = ? AND password = ?";
     return new Promise(function(resolve, reject){
         pool.query(sql, [username, password], function (err, rows, fields){
@@ -176,6 +132,6 @@ function checkCredentials(username, password) {
 }
 
 //starting server
-app.listen(process.env.PORT, process.env.IP, function() {
+app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Express server is running...");
 });
