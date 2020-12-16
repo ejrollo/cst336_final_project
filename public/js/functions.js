@@ -1,11 +1,10 @@
 /* global */
 $(document).ready(function(){
-    
+
     //total of shopping cart
     var total = 0;
     //array of games
     var games = [];
-    //game1
     games[1] = {cost: 59.99, qty: 0, name: "ASSASSINS CREED VALHALLA"};
     games[2] = {cost: 69.99, qty: 0, name: "MADDEN 21"};
     games[3] = {cost: 99.99, qty: 0, name: "FIFA 21"};
@@ -18,12 +17,12 @@ $(document).ready(function(){
     games[10] = {cost: 59.99, qty: 0, name: "GOD OF WAR"};
     games[11] = {cost: 69.99, qty: 0, name: "THE INRECEDIBLES"};
     games[12] = {cost: 99.99, qty: 0, name: "SPYRO"};
-    
+
     for(let i = 1; i < games.length; i++) {
         $(`#game${i}cost`).html(`$${games[i].cost}`);
     }
-    
-    
+
+
     $(".gamebtn").on("click", function(){
         let gameNum = this.value;
         games[gameNum].qty++;
@@ -34,20 +33,25 @@ $(document).ready(function(){
         $(`#game${gameNum}qty`).html(`${games[gameNum].qty}`);
         $("#totalCost").html(`${total}`);
     });
-    
+
     //displaying city from API after typing a zip code
     $("#zip").on("change", async function(){
+        $("#zipError").html("");
         let zipCode = $("#zip").val();
         let url = `https://cst336.herokuapp.com/projects/api/cityInfoAPI.php?zip=${zipCode}`;
         let response = await fetch(url);
         let data = await response.json();
-                
+
         $("#city").html(data.city);
-        
+
         if (data == false){
             $("#zipError").html("Zip code not valid, re-enter");
             $("#zipError").css("color","red");
         }
-                
+
     });//zip
+
+
 });
+
+
