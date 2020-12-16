@@ -155,6 +155,10 @@ app.post("/addCart", async function(req, res) {
     res.render("product", { "ps4Url": req.session.pic, "fakerName": randName, "products": req.session.products, "cart": cart });
 });
 
+app.get("/submit", function(req, res){
+    res.render("submit");
+});
+
 function isAuthenticated(req, res, next){
     if (!req.session.authenticated){
         res.redirect('/');
